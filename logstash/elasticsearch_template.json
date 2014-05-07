@@ -1,0 +1,82 @@
+{
+  "template":"logstash-ossec-*",
+  "settings":{
+    "index.analysis.analyzer.default.stopwords":"_none_",
+    "index.refresh_interval":"5s",
+    "index.analysis.analyzer.default.type":"standard"
+  },
+  "mappings":{
+    "ossec":{
+      "properties":{
+        "@fields.hostname":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "@fields.product":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "@message":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "@timestamp":{
+          "type":"date"
+        },
+        "@version":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "acct":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "ossec_group":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "ossec_server":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "raw_message":{
+          "type":"string",
+          "index":"analyzed"
+        },
+        "reporting_ip":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "reporting_source":{
+          "type":"string",
+          "index":"analyzed"
+        },
+        "rule_number":{
+          "type":"integer"
+        },
+        "severity":{
+          "type":"integer"
+        },
+        "signature":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "src_ip":{
+          "type":"string",
+          "index":"not_analyzed"
+        },
+        "geoip":{
+          "type" : "object",
+          "dynamic": true,
+          "path": "full",
+          "properties" : {
+            "location" : { "type" : "geo_point" }
+          }
+        }
+      },
+      "_all":{
+        "enabled":true
+      }
+    }
+  }
+}
