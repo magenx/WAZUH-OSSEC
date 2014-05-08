@@ -10,7 +10,7 @@
         "10": {
           "id": 10,
           "color": "#447EBC",
-          "alias": "",
+          "alias": "stream",
           "pin": false,
           "type": "lucene",
           "enable": true,
@@ -186,7 +186,7 @@
           "chart": "pie",
           "counter_pos": "none",
           "spyable": true,
-          "title": "REPORTING SERVER",
+          "title": "Reporting Server",
           "tmode": "terms",
           "tstat": "total",
           "valuefield": ""
@@ -222,7 +222,7 @@
           "tmode": "terms",
           "tstat": "count",
           "valuefield": "",
-          "title": "ATTACKING COUNTRY"
+          "title": "COUNTRY ECHO"
         },
         {
           "error": false,
@@ -288,7 +288,7 @@
           "tmode": "terms",
           "tstat": "total",
           "valuefield": "",
-          "title": "WARNING MESSAGES"
+          "title": "SIGNATURE"
         }
       ],
       "notice": false
@@ -366,22 +366,22 @@
   "pulldowns": [
     {
       "type": "query",
-      "collapse": true,
+      "collapse": false,
       "notice": false,
       "enable": true,
       "query": "*",
       "pinned": true,
       "history": [
         "*",
-        "severity:*",
-        "src_ip:*",
-        "rule_number:*",
-        "signature:*",
-        "signature:15",
-        "@fields.hostname:*",
-        "geoip.country_code3:*",
-        "geoip.country_name:*",
-        "geoip:*"
+        "reporting_source:*secure",
+        "reporting_source:secure",
+        "severity:{4 TO *}",
+        "severity:{6 TO *}",
+        "severity:{5 TO *}",
+        "rule_number:{5700 TO 5899}",
+        "rule_number:{30100 TO 30999}",
+        "rule_number:{40096 TO 40500}",
+        "rule_number:{400 TO 40500}"
       ],
       "remember": 10
     },
