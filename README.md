@@ -1,7 +1,7 @@
 ﻿OSSEC
 -------------
 
-**OSSEC ALERTS MANAGEMENT WITH LOGSTASH - ELASTICSEARCH - KIBANA**<br/>
+**OSSEC WAZUH ALERTS MANAGEMENT WITH LOGSTASH - ELASTICSEARCH - KIBANA**<br/>
 **this is now part of Magento 2 installation script.**<br/>
 
 <br/>
