@@ -13,7 +13,7 @@ CENTOS_VERSION="8"
 
 # ELK version lock
 ELKVER="7.6.0"
-KAPPVER="3.11.3"
+KAPPVER="3.11.4"
 ELKREPO="7.x"
 
 NGINX_VERSION=$(curl -s http://nginx.org/en/download.html | grep -oP '(?<=gz">nginx-).*?(?=</a>)' | head -1)
