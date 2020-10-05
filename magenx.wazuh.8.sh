@@ -8,12 +8,16 @@ SELF=$(basename $0)
 MAGENX_VER="1.8.312.3"
 MAGENX_BASE="https://magenx.sh?wazuh"
 
+# Config path
+MAGENX_CONFIG_PATH="/opt/magenx/config"
+mkdir -p ${MAGENX_CONFIG_PATH}
+
 # CentOS version lock
 CENTOS_VERSION="8"
 
 # ELK version lock
-ELKVER="7.7.0"
-KAPPVER="3.12.3"
+ELKVER="7.9.2"
+KAPPVER="3.13.2"
 ELKREPO="7.x"
 
 NGINX_VERSION=$(curl -s http://nginx.org/en/download.html | grep -oP '(?<=gz">nginx-).*?(?=</a>)' | head -1)
@@ -107,6 +111,8 @@ EOF
 echo
 dnf -y install --enablerepo=elasticsearch-${ELKREPO} elasticsearch-${ELKVER}
 echo
+echo "discovery.type: single-node" >> /etc/elasticsearch/elasticsearch.yml
+echo "xpack.security.enabled: true" >> /etc/elasticsearch/elasticsearch.yml
 sed -i "s/.*cluster.name.*/cluster.name: wazuh/" /etc/elasticsearch/elasticsearch.yml
 sed -i "s/.*node.name.*/node.name: wazuh-node1/" /etc/elasticsearch/elasticsearch.yml
 sed -i "s/.*network.host.*/network.host: 127.0.0.1/" /etc/elasticsearch/elasticsearch.yml
@@ -117,6 +123,18 @@ chown -R :elasticsearch /etc/elasticsearch/*
 systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl restart elasticsearch.service
+
+/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto -b > /tmp/elasticsearch
+
+cat > ${MAGENX_CONFIG_PATH}/elasticsearch <<END
+APM_SYSTEM_PASSWORD="$(awk '/PASSWORD apm_system/ { print $4 }' /tmp/elasticsearch)"
+KIBANA_SYSTEM_PASSWORD="$(awk '/PASSWORD kibana_system/ { print $4 }' /tmp/elasticsearch)"
+KIBANA_PASSWORD="$(awk '/PASSWORD kibana =/ { print $4 }' /tmp/elasticsearch)"
+LOGSTASH_SYSTEM_PASSWORD="$(awk '/PASSWORD logstash_system/ { print $4 }' /tmp/elasticsearch)"
+BEATS_SYSTEM_PASSWORD="$(awk '/PASSWORD beats_system/ { print $4 }' /tmp/elasticsearch)"
+REMOTE_MONITORING_USER_PASSWORD="$(awk '/PASSWORD remote_monitoring_user/ { print $4 }' /tmp/elasticsearch)"
+ELASTIC_PASSWORD="$(awk '/PASSWORD elastic/ { print $4 }' /tmp/elasticsearch)"
+END
 
 echo
 GREENTXT "WAZUH MANAGER INSTALLATION"
