@@ -124,7 +124,7 @@ cat > /etc/yum.repos.d/wazuh.repo <<EOF
 [wazuh_repo]
 gpgcheck=1
 gpgkey=https://packages.wazuh.com/key/GPG-KEY-WAZUH
-enabled=1
+enabled=0
 name=Wazuh repository
 baseurl=https://packages.wazuh.com/3.x/yum/
 protect=1
@@ -134,7 +134,7 @@ echo
 GREENTXT "WAZUH API + NODEJS INSTALLATION"
 curl --location https://rpm.nodesource.com/setup_10.x | bash
 yum -y install nodejs
-yum -y install wazuh-api-${KAPPVER}
+yum -y --enablerepo=wazuh_repo install wazuh-api-${KAPPVER}
 echo
 GREENTXT "PACKETBEAT INSTALLATION:"
 yum -y install --enablerepo=elasticsearch-${ELKREPO} packetbeat-${ELKVER}
