@@ -16,7 +16,7 @@ mkdir -p ${MAGENX_CONFIG_PATH}
 CENTOS_VERSION="8"
 
 # ELK version lock
-ELKVER="7.9.2"
+ELKVER="7.9.1"
 KAPPVER="3.13.2"
 ELKREPO="7.x"
 
