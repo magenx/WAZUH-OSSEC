@@ -201,11 +201,11 @@ sed -i 's/.*config.host.*/config.host = "127.0.0.1";/' /var/ossec/api/configurat
 echo
 read -e -p "---> Enter domain name: " -i "wazuh.example.com" WAZUH_DOMAIN
 KIBANA_PORT=$(shuf -i 10322-10539 -n 1)
-KIBANA_PASSWD=$(head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9!@#$%^&?=+_[]{}()<>-' | fold -w 6 | head -n 1)
-WAZUH_API_PASSWD=$(head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9!@#$%^&?=+_[]{}()<>-' | fold -w 6 | head -n 1)
-htpasswd -b -c /etc/nginx/.wazuh wazuh-web "${KIBANA_PASSWD}"
+KIBANA_PASSWORD=$(head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9!@#$%^&?=+_[]{}()<>-' | fold -w 6 | head -n 1)
+WAZUH_API_PASSWORD=$(head -c 500 /dev/urandom | tr -dc 'a-zA-Z0-9!@#$%^&?=+_[]{}()<>-' | fold -w 6 | head -n 1)
+htpasswd -b -c /etc/nginx/.wazuh wazuh-web "${KIBANA_PASSWORD}"
 cd /var/ossec/api/configuration/auth
-htpasswd -b -c user wazuh-api "${WAZUH_API_PASSWD}"
+htpasswd -b -c user wazuh-api "${WAZUH_API_PASSWORD}"
 systemctl restart wazuh-api
 echo
 GREENTXT "LETSENCRYPT SSL CERTIFICATE REQUEST"
@@ -246,13 +246,15 @@ cat > /etc/nginx/sites-available/kibana.conf <<END
        }
 }
 END
+
 echo
+
 cd /etc/nginx/sites-enabled/
 ln -s /etc/nginx/sites-available/kibana.conf kibana.conf
 service nginx reload
 echo
 YELLOWTXT "KIBANA WEB INTERFACE PORT: ${KIBANA_PORT}"
-YELLOWTXT "KIBANA HTTP AUTH: wazuh-web ${KIBANA_PASSWD}"
+YELLOWTXT "KIBANA HTTP AUTH: wazuh-web ${KIBANA_PASSWORD}"
 echo
-YELLOWTXT "WAZUH API AUTH: wazuh-api ${WAZUH_API_PASSWD}"
+YELLOWTXT "WAZUH API AUTH: wazuh-api ${WAZUH_API_PASSWORD}"
 echo
